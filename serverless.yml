@@ -60,6 +60,14 @@ functions:
           method: delete
           cors: true
 
+  translate:
+    handler: todos/update.update
+    events:
+      - http:
+          path: todos/{id}/{language}
+          method: get
+          cors: true               
+  
 resources:
   Resources:
     TodosDynamoDbTable:
