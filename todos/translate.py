@@ -5,8 +5,11 @@ from todos import decimalencoder
 import boto3
 dynamodb = boto3.resource('dynamodb')
 
-
 def translate(event, context):
+
+    # get target language from request
+    target_lang=event['pathParameters']['language']
+
     table = dynamodb.Table(os.environ['DYNAMODB_TABLE'])
 
     # fetch todo from the database
@@ -16,12 +19,16 @@ def translate(event, context):
         }
     )
     
-    translate = boto3.client(service_name='translate', region_name='ue-east-1', use_ssl=False)
+        
+    # get translate service
+    translate = boto3.client(service_name='translate', region_name='us-east-1')
     
-    translate = translate.translate_text(Text=result['Item']['text'], 
-            SourceLanguageCode="es", TargetLanguageCode=event['pathParameters']['language'])
-        print('TranslatedText: ' + translate.get('TranslatedText'))
-        result['Item']['text']= translate.get('TranslatedText')
+    translated_text = translate.translate_text(Text=result['Item']['text'], 
+                SourceLanguageCode="auto", TargetLanguageCode=target_lang)
+    
+    # translate text
+    result['Item']['text']=translated_text.get('TranslatedText')
+
     # create a response
     response = {
         "statusCode": 200,
