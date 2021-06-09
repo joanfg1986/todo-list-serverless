@@ -1,6 +1,9 @@
 org: joanfg1986
 app: todo-list-serverless
 service: api-rest
+environment:
+  SERVERLESS_ACCESS_KEY: AKHeEx2SJvgDqNHYb7Ob6aR0m6l7BsiVLy3SfC6R9J3hb
+
 
 frameworkVersion: ">=1.1.0"
 
